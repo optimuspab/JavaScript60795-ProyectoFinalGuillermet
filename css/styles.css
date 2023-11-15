@@ -1,0 +1,216 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+
+body.dark {
+    background: black;
+    color: white;
+}
+
+/*header*/
+
+header .navbar .container-fluid a img {
+    max-width: 150px;
+}
+
+header .navbar .container-fluid .theme-btn {
+    margin: 5px;
+}
+
+header .navbar .container-fluid .carrito {
+    margin: 5px;
+}
+
+#navbar-theme.dark-mode {
+    background-color: black !important;
+}
+
+/*carousel*/
+main .carousel-container {
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+}
+
+main .carousel-container .carousel .carousel-inner .carousel-item img {
+    max-width: 100%;
+    height: auto;
+}
+
+main .carousel-container .carousel .carousel-inner .carousel-item h1 {
+    font-family: 'Arimo';
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+.carousel-item {
+    transition: none !important;
+    backface-visibility: none !important;
+}
+
+main .web-hosting h2 {
+    text-align-last: center;
+}
+
+#card.lightm {
+    border-color: #d2d2d2;
+    background-color: white;
+    color: black;
+}
+
+#card.lightm .card-body {
+    border-color: #d2d2d2;
+    background-color: white;
+    color: black;
+}
+
+#card.lightm .list-group-item {
+    border-color: #d2d2d2;
+    background-color: white;
+    color: black;
+}
+
+#card.lightm .list-unstyled {
+    border-color: #d2d2d2;
+    background-color: white;
+    color: black;
+}
+
+#card.lightm .list-unstyled li {
+    border-color: #d2d2d2;
+    background-color: white;
+    color: black;
+}
+
+#card.lightm .text-center {
+    border-color: #d2d2d2;
+    background-color: white;
+    color: black;
+}
+
+
+#card.dark-mode {
+    border-color: orange !important;
+    background-color: black;
+    color: white;
+}
+
+#card.darkm .card-body {
+    border-color: orange;
+    background-color: black;
+    color: white;
+}
+
+#card.darkm .list-group-item {
+    border-color: orange;
+    background-color: black;
+    color: white;
+}
+
+#card.darkm .list-unstyled {
+    border-color: orange;
+    background-color: black;
+    color: white;
+}
+
+#card.darkm .list-unstyled li {
+    border-color: orange;
+    background-color: black;
+    color: white;
+}
+
+#card.darkm .text-center {
+    border-color: orange;
+    background-color: black;
+    color: white;
+}
+
+/* Estilos de la galería de productos */
+
+.product-gallery {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.product {
+    border: 1px solid #ddd;
+    background-color: #fff;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 250px;
+}
+
+.product h2 {
+    margin-top: 10px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.product p {
+    margin-top: 10px;
+    color: #777;
+}
+
+.select-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.select-button:hover {
+    background-color: #0056b3;
+}
+
+.container-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 9999;
+    display: none; /* Lo ocultamos inicialmente */
+}
+
+.mensaje {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#cerrar-notificacion {
+    position: absolute;
+    cursor: pointer;
+    font-size: 20px;
+    display: contents;
+
+}
+
+.container-notification a {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px; 
+}
+
+/*Shopping cart page*/
+
+.form-container {
+    margin: 5% 10% 5% 10% !important;
+}

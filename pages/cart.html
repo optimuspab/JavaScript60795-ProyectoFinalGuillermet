@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Somos una empresa de IT que ofrece soluciones de hosting cloud de sitios web, servidor y servicios para empresas de todos los tamaños. Contamos con más de 10 años de experiencia en el mercado y un equipo de profesionales altamente calificados.">
+    <meta name="keywords" content="hosting, cloud, ssl, website, sitio web, servidores, nube, dominio">
+    <meta name="author" content="Pablo Guillermet">
+    <meta name="robots" content="index,follow">
+
+    <link rel="icon" href="../images/gear.png">
+
+    <title>Collaboration IT - Carrito</title>
+
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href='https://fonts.googleapis.com/css?family=Arimo:wght@400;500;600;700&display=swap' rel="stylesheet">
+
+</head>
+
+<body>
+
+    <header>
+        <nav id="navbar-theme" class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="../index.html">
+                    <img src="../images/logo.png" alt="Logo 'Collaboration IT' escrito a mano" class="logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contacto</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <button id="theme-toggle" class="btn btn-dark theme-btn">Tema Oscuro</button>
+
+                <button type="button" class="btn btn-danger carrito" href="cart.html">
+                    <i id="menu-cart-button" class="bi bi-cart"></i>
+                    Mi Carrito
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div id="form-container" class="row form-container">
+            <div class="col-md-4 order-md-2 mb-4 products-list">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span>Mi Carrito</span>
+                </h4>
+                <ul id="selected-products-list" class="list-group mb-3">
+                </ul>
+
+                <form class="card p-2">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Promo code">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-secondary">Redeem</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-8 order-md-1">
+                <h4 class="mb-3">Datos de Facturación</h4>
+                <form class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">Nombre</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                            <div class="invalid-feedback">
+                                El valor ingresado en nombre no es válido.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName">Apellido</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                            <div class="invalid-feedback">
+                                El valor ingresado en apellido no es válido.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="correo@ejemplo.com">
+                        <div class="invalid-feedback">
+                            Ingrese una dirección de correo válida.
+                        </div>
+                    </div>
+
+                    <hr class="mb-4">
+
+                    <h4 class="mb-3">Pago</h4>
+
+                    <div class="d-block my-3">
+                        <div class="custom-control custom-radio">
+                            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked
+                                required>
+                            <label class="custom-control-label" for="credit">Tarjeta de Crédito</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+                            <label class="custom-control-label" for="debit">Tarjeta de Débito</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cc-name">Nombre del Titular</label>
+                            <input type="text" class="form-control" id="cc-name" placeholder="" required>
+                            <small class="text-muted">Como aparece en la tarjeta</small>
+                            <div class="invalid-feedback">
+                                El valor ingresado en nombre no es válido.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cc-number">Número de tarjeta</label>
+                            <input type="text" class="form-control" id="cc-number" placeholder="" required>
+                            <div class="invalid-feedback">
+                               El número de tarjeta de crédito es requerido
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="cc-expiration">Expiración</label>
+                            <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+                            <small class="text-muted">MM/AA</small>
+                            <div class="invalid-feedback">
+                                Fecha de expiración requerida
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="cc-expiration">CVV</label>
+                            <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                            <small class="text-muted">NNN</small>
+                            <div class="invalid-feedback">
+                                Código de seguridad requerido.
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mb-4">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Finalizar compra</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <footer class="py-3 my-4">
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item"><a id="text-footer" href="#" class="nav-link px-2 text-dark">Home</a></li>
+            <li class="nav-item"><a id="text-footer" href="#" class="nav-link px-2 text-dark">Productos</a></li>
+            <li class="nav-item"><a id="text-footer" href="#" class="nav-link px-2 text-dark">Contacto</a></li>
+            <li class="nav-item"><a id="text-footer" href="pages/cart.html" class="nav-link px-2 text-dark"><i
+                        id="menu-cart-button" class="bi bi-cart"></i> Mi Carrito</a>
+            </li>
+        </ul>
+        <p id="text-footer" class="text-center text-dark">© 2023 Pablo Guillermet</p>
+    </footer>
+    <script src="../data/products.js"></script>
+    <script src="../scripts/main.js"></script>
+
+    <!-- Latest Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
