@@ -59,6 +59,10 @@ main .web-hosting h2 {
     text-align-last: center;
 }
 
+main .vps-hosting h2 {
+    text-align-last: center;
+}
+
 #card.lightm {
     border-color: #d2d2d2;
     background-color: white;
@@ -213,4 +217,8 @@ main .web-hosting h2 {
 
 .form-container {
     margin: 5% 10% 5% 10% !important;
+}
+
+#renew {
+    display: none;
 }
