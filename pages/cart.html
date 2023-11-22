@@ -92,14 +92,15 @@
                     </div>
                 </form>
 
-                <form class="card p-2">
+                <form id="promoForm" class="card p-2">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Promo code">
+                        <input id="promoCodeInput" type="text" class="form-control" placeholder="Código promoción">
                         <div class="input-group-append">
-                            <button type="submit" class="btn btn-secondary">Redeem</button>
+                            <button id="redeemButton" type="submit" class="btn btn-secondary">Canjear</button>
                         </div>
                     </div>
                 </form>
+                
             </div>
             <div class="col-md-8 order-md-1">
                 <h4 class="mb-3">Datos de Facturación</h4>
@@ -172,7 +173,7 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="cc-expiration">CVV</label>
-                            <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                            <input type="password" class="form-control" id="cc-cvv" placeholder="" required>
                             <small class="text-muted">NNN</small>
                             <div class="invalid-feedback">
                                 Código de seguridad requerido.

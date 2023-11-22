@@ -185,14 +185,13 @@ function initializePage() {
                 destination: "pages/cart.html",
                 newWindow: true,
                 close: true,
-                gravity: "bottom", // `top` or `bottom`
-                position: "right", // `left`, `center` or `right`
-                stopOnFocus: true, // Prevents dismissing of toast on hover
+                gravity: "bottom",
+                position: "right",
+                stopOnFocus: true,
                 style: {
-                  background: "linear-gradient(to right, transparent, #007bff, #0056b3)",
+                    background: "linear-gradient(to right, transparent, #0056b3, #007bff )",
                 },
-                //onClick: function(){} // Callback after click
-              }).showToast();
+            }).showToast();
 
             cartButton.forEach(element => {
                 element.classList.remove('bi-cart');
@@ -273,16 +272,41 @@ function initializePage() {
 
             const checkoutPriceText = document.createElement("span");
             checkoutPriceText.classList.add("text-dark", "fw-bold");
+            checkoutPriceText.id = "currency-text";
             checkoutPriceText.textContent = "Total (USD)";
 
             const checkoutPriceNumber = document.createElement("strong");
             checkoutPriceNumber.classList.add("text-success");
+            checkoutPriceNumber.id = "currency-number";
             checkoutPriceNumber.textContent = "$ " + checkoutPrice;
 
             priceListItem.appendChild(checkoutPriceText);
             priceListItem.appendChild(checkoutPriceNumber);
 
             productsListContainer.appendChild(priceListItem);
+
+            const currencySwitch = document.createElement("li");
+            currencySwitch.classList.add("list-group-item", "d-flex", "justify-content-between");
+
+            const currencyContainer = document.createElement("div");
+            currencyContainer.classList.add("form-check", "form-switch");
+
+            const currencyInput = document.createElement("input");
+            currencyInput.classList.add("form-check-input");
+            currencyInput.type = "checkbox";
+            currencyInput.id = "flexSwitchCheckCurrency";
+
+            const currencyLabel = document.createElement("label");
+            currencyLabel.classList.add("form-check-label");
+            currencyLabel.htmlFor = "flexSwitchCheckCurrency";
+            currencyLabel.textContent = "ARS";
+
+            currencyContainer.appendChild(currencyInput);
+            currencyContainer.appendChild(currencyLabel);
+
+            currencySwitch.appendChild(currencyContainer);
+
+            productsListContainer.appendChild(currencySwitch);
 
             const clearCartButton = document.createElement("button");
             clearCartButton.classList.add("btn", "btn-danger", "mb-3");
@@ -305,14 +329,13 @@ function initializePage() {
             destination: "../index.html",
             newWindow: true,
             close: true,
-            gravity: "bottom", // `top` or `bottom`
-            position: "right", // `left`, `center` or `right`
-            stopOnFocus: true, // Prevents dismissing of toast on hover
+            gravity: "bottom",
+            position: "right",
+            stopOnFocus: true,
             style: {
-              background: "linear-gradient(to right, transparent, #007bff, #0056b3)",
+                background: "linear-gradient(to right, transparent, #0056b3, #007bff )",
             },
-            //onClick: function(){} // Callback after click
-          }).showToast();
+        }).showToast();
     }
 
     function removeFromCart(title) {
@@ -338,18 +361,17 @@ function initializePage() {
             destination: "cart.html",
             newWindow: true,
             close: true,
-            gravity: "bottom", // `top` or `bottom`
-            position: "right", // `left`, `center` or `right`
-            stopOnFocus: true, // Prevents dismissing of toast on hover
+            gravity: "bottom",
+            position: "right",
+            stopOnFocus: true,
             style: {
-              background: "linear-gradient(to right, transparent, #007bff, #0056b3)",
+                background: "linear-gradient(to right, transparent, #0056b3, #007bff )",
             },
-            //onClick: function(){} // Callback after click
-          }).showToast();
+        }).showToast();
 
     }
 
-    function updateCartView() {
+    function updateCartView(discount = 0) {
         const productsListContainer = document.getElementById("selected-products-list");
         productsListContainer.innerHTML = "";
 
@@ -400,10 +422,12 @@ function initializePage() {
 
         }
 
-        const checkoutPrice = calculateCheckoutPrice(productCounts);
+        const checkoutPrice = calculateCheckoutPrice(productCounts, discount);
 
         displayCheckoutPrice(checkoutPrice);
 
+        updatePriceDisplay();
+        
     }
 
     const suscriptionMesInput = document.getElementById('monthly');
@@ -423,7 +447,72 @@ function initializePage() {
         updateCartView();
     });
 
-    function calculateCheckoutPrice(productCounts) {
+    function validarCodigoPromocional(promoCode) {
+        return promoCode === 'coderhouse';
+    }
+
+    let isPromoCodeApplied = false;
+
+    document.getElementById('promoForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const promoCodeInput = document.getElementById('promoCodeInput');
+        const promoCode = promoCodeInput.value.trim().toLowerCase();
+
+        if (!isPromoCodeApplied && validarCodigoPromocional(promoCode)) {
+            const checkoutPrice = calculateCheckoutPrice(productCounts);
+            const discount = checkoutPrice * 0.1;
+            updateCartView(discount);
+            isPromoCodeApplied = true;
+
+            Toastify({
+                text: `Código promocional aplicado!`,
+                duration: 5000,
+                destination: "cart.html",
+                newWindow: true,
+                close: true,
+                gravity: "bottom",
+                position: "right",
+                stopOnFocus: true,
+                style: {
+                    background: "linear-gradient(to right, transparent, #0056b3, #007bff )",
+                },
+            }).showToast();
+        } else if (isPromoCodeApplied) {
+            Toastify({
+                text: `El código promocional ya se ha aplicado.'`,
+                duration: 5000,
+                destination: "cart.html",
+                newWindow: true,
+                close: true,
+                gravity: "bottom",
+                position: "right",
+                stopOnFocus: true,
+                style: {
+                    background: "linear-gradient(to right, transparent, #DC4C64, #bb2d3b)",
+                },
+            }).showToast();
+        } else {
+            Toastify({
+                text: `Código promocional inválido. Por favor, inténtelo de nuevo.`,
+                duration: 5000,
+                destination: "cart.html",
+                newWindow: true,
+                close: true,
+                gravity: "bottom",
+                position: "right",
+                stopOnFocus: true,
+                style: {
+                    background: "linear-gradient(to right, transparent, #DC4C64, #bb2d3b)",
+                },
+            }).showToast();
+        }
+
+        promoCodeInput.value = '';
+    });
+
+
+    function calculateCheckoutPrice(productCounts, discount = 0) {
         let checkoutPrice = 0;
 
         for (const title in productCounts) {
@@ -444,7 +533,7 @@ function initializePage() {
             }
         }
 
-        return checkoutPrice;
+        return checkoutPrice - discount;
     }
 
     function displayCheckoutPrice(price) {
@@ -455,10 +544,12 @@ function initializePage() {
 
         const checkoutPriceText = document.createElement("span");
         checkoutPriceText.classList.add("text-dark", "fw-bold");
+        checkoutPriceText.id = "currency-text";
         checkoutPriceText.textContent = "Total (USD)";
 
         const checkoutPriceNumber = document.createElement("strong");
         checkoutPriceNumber.classList.add("text-success");
+        checkoutPriceNumber.id = "currency-number";
         checkoutPriceNumber.textContent = "$ " + price;
 
         priceListItem.appendChild(checkoutPriceText);
@@ -466,50 +557,224 @@ function initializePage() {
 
         productsListContainer.appendChild(priceListItem);
 
+        const currencySwitch = document.createElement("li");
+        currencySwitch.classList.add("list-group-item", "d-flex", "justify-content-between");
+
+        const currencyContainer = document.createElement("div");
+        currencyContainer.classList.add("form-check", "form-switch");
+
+        const currencyInput = document.createElement("input");
+        currencyInput.classList.add("form-check-input");
+        currencyInput.type = "checkbox";
+        currencyInput.id = "flexSwitchCheckCurrency";
+
+        const currencyLabel = document.createElement("label");
+        currencyLabel.classList.add("form-check-label");
+        currencyLabel.htmlFor = "flexSwitchCheckCurrency";
+        currencyLabel.textContent = "ARS";
+
+        currencyContainer.appendChild(currencyInput);
+        currencyContainer.appendChild(currencyLabel);
+
+        currencySwitch.appendChild(currencyContainer);
+
+        productsListContainer.appendChild(currencySwitch);
+
         const clearCartButton = document.createElement("button");
         clearCartButton.classList.add("btn", "btn-danger", "mb-3");
         clearCartButton.textContent = "Vaciar Carrito";
         clearCartButton.addEventListener("click", clearCart);
         productsListContainer.appendChild(clearCartButton);
+
     }
 
-    const formulario = document.querySelector('.needs-validation');
+    // obtener valor del dolar
 
-    formulario.addEventListener('submit', function (event) {
+    let dolarToday = 0;
+
+    async function dolarValue() {
+        try {
+            const response = await fetch("https://criptoya.com/api/dolar");
+            const data = await response.json();
+
+            const valorOficial = data.oficial;
+
+            dolarToday = parseFloat(valorOficial);
+
+            console.log(dolarToday);
+
+        } catch (error) {
+            console.error("Error al obtener el valor del dólar:", error);
+        }
+    }
+
+    dolarValue();
+
+    let currencyNumber = document.getElementById("currency-number");
+    let currencyText = document.getElementById("currency-text");
+    let currencySelector = document.getElementById("flexSwitchCheckCurrency");
+    let currencyLabel = document.querySelector(".form-check-label[for='flexSwitchCheckCurrency']");
+    let isARSSelected = false;
+    
+    function updatePriceDisplay() {
+        if (isARSSelected) {
+            currencyLabel.textContent = "Precio en USD";
+            let num = currencyNumber.textContent.match(/\d/g);
+            num = num.join("");
+            num = parseFloat(num);
+            currencyNumber.textContent = "$ " + num * dolarToday;
+            currencyText.textContent = "Total (ARS)";
+        } else {
+            currencyLabel.textContent = "Precio en ARS";
+            let num = currencyNumber.textContent.match(/\d/g);
+            num = num.join("");
+            num = parseFloat(num);
+            currencyNumber.textContent = "$ " + Math.round(num / dolarToday);
+            currencyText.textContent = "Total (USD)";
+        }
+    }
+
+
+    currencySelector.addEventListener("change", function () {
+        isARSSelected = !isARSSelected;
+        updatePriceDisplay();
+    });
+
+    //Formulario finalización de compra
+
+    const form = document.querySelector('.needs-validation');
+
+    class CreditCardValidator {
+        constructor() {
+            this.cards = {
+                mc: '5[1-5][0-9]{14}',
+                ec: '5[1-5][0-9]{14}',
+                vi: '4(?:[0-9]{12}|[0-9]{15})',
+                ax: '3[47][0-9]{13}',
+                dc: '3(?:0[0-5][0-9]{11}|[68][0-9]{12})',
+                bl: '3(?:0[0-5][0-9]{11}|[68][0-9]{12})',
+                di: '6011[0-9]{12}',
+                jcb: '(?:3[0-9]{15}|(2131|1800)[0-9]{11})',
+                er: '2(?:014|149)[0-9]{11}',
+            };
+        }
+
+        validate(value, ccType) {
+            value = String(value).replace(/[- ]/g, '');
+
+            const cardInfo = this.cards;
+            const results = [];
+
+            if (ccType) {
+                const expr = `^${cardInfo[ccType.toLowerCase()]}$`;
+                return expr ? !!value.match(expr) : false;
+            }
+
+            for (const p in cardInfo) {
+                if (value.match(`^${cardInfo[p]}$`)) {
+                    results.push(p);
+                }
+            }
+
+            return results.length ? results.join('|') : false;
+        }
+    }
+
+    const creditCardValidator = new CreditCardValidator();
+
+    form.addEventListener('submit', function (event) {
         event.preventDefault();
+        event.stopPropagation();
 
+        if (form.checkValidity()) {        
         const inputNombre = document.getElementById('firstName');
         const inputApellido = document.getElementById('lastName');
         const inputEmail = document.getElementById('email');
-        const inputCredit = document.getElementById('credit');
-        const inputDebit = document.getElementById('debit');
         const inputCCName = document.getElementById('cc-name');
         const inputCCNumber = document.getElementById('cc-number');
         const inputCCExpiration = document.getElementById('cc-expiration');
         const inputCCCVV = document.getElementById('cc-cvv');
 
-        const feedbackNombre = inputNombre.nextElementSibling;
+        const isNombreValid = inputNombre.value.trim() !== '';
+        const isApellidoValid = inputApellido.value.trim() !== '';
+        const isEmailValid = isValidEmail(inputEmail.value);
+        const isCCNameValid = inputCCName.value.trim() !== '';
+        const isCCNumberValid = creditCardValidator.validate(inputCCNumber.value);
+        const isCCExpirationValid = validateExpiration(inputCCExpiration.value);
+        const isCCCVVValid = validateCVV(inputCCCVV.value);
 
-        if (inputNombre.value.trim() === '' || inputApellido.value.trim() === '' || inputEmail.value.trim() === '' || inputCCName.value.trim() === '' || inputCCNumber.value.trim() === '' || inputCCExpiration.value.trim() === '' || inputCCCVV.value.trim() === '') {
+        if (
+            isNombreValid &&
+            isApellidoValid &&
+            isEmailValid &&
+            isCCNameValid &&
+            isCCNumberValid &&
+            isCCExpirationValid &&
+            isCCCVVValid
+        ) {
+            clearCart();
 
-            feedbackNombre.style.display = 'block';
+            form.reset();
+    
+            Toastify({
+                text: '¡Formulario enviado con éxito!',
+                duration: 3000,
+                gravity: 'top',
+                close: true,
+                backgroundColor: 'green',
+            }).showToast();
+    
             return;
-
-        } else {
-
-            feedbackNombre.style.display = 'none';
         }
+        Toastify({
+            text: 'Por favor, complete todos los campos correctamente.',
+            duration: 3000, // Duración en milisegundos
+            gravity: 'top', // Posición de la notificación
+            close: true, // Agrega un botón de cierre
+            backgroundColor: 'red', // Color de fondo
+        }).showToast();
+    }
+        
+        form.classList.add('was-validated');
 
-        if (!inputCredit.checked && !inputDebit.checked) {
-            feedbackNombre.style.display = 'block';
-            return;
-        } else {
-
-            feedbackNombre.style.display = 'none';
-        }
-
-        event.target.reset();
     });
+    
+
+    form.addEventListener('input', function (event) {
+        const input = event.target;
+        if (input.checkValidity()) {
+            input.classList.remove('is-invalid');
+        } else {
+            input.classList.add('is-invalid');
+        }
+    });
+
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    function validateCVV(cvv) {
+        const cvvPattern = /^[0-9]{3,4}$/;
+        return cvvPattern.test(cvv);
+    };
+
+    function validateExpiration(mmyy) {
+        const regex = /^(0[1-9]|1[0-2])\/(\d{2})$/;
+        if (!regex.test(mmyy)) {
+            return false;
+        }
+    
+        const [mm, yy] = mmyy.split('/');
+    
+        const month = parseInt(mm, 10);
+        const year = parseInt(yy, 10) + 2000;
+    
+        const currentYear = new Date().getFullYear();
+    
+        return month >= 1 && month <= 12 && year >= currentYear;
+    }
+
 }
 
 document.addEventListener('DOMContentLoaded', function () {
