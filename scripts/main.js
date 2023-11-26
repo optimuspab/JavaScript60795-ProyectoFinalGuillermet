@@ -1,4 +1,83 @@
 function initializePage() {
+    const navBar = document.getElementById("navbar-theme");
+    const themeButton = document.querySelector('#theme-toggle');
+    const cardTheme = document.querySelectorAll('#card');
+    const textFooter = document.querySelectorAll('#text-footer');
+    const cartLi = document.querySelectorAll('#selected-products-list');
+    const sliderImg = document.querySelectorAll('#swiper-slide-img');
+
+    if (localStorage.getItem("dark-mode") === "yes") {
+        document.body.classList.add('dark');
+        themeButton.innerText = "Tema Claro";
+        themeButton.classList.remove('btn-light');
+        themeButton.classList.add('btn-dark');
+        navBar.classList.toggle('dark-mode');
+        cardTheme.forEach(card => {
+            card.classList.remove('lightm');
+            card.classList.add('darkm');
+        });
+        textFooter.forEach(text => {
+            text.classList.remove('text-dark');
+            text.classList.add('text-light');
+        });
+        cartLi.forEach(text => {
+            text.classList.remove('mdark');
+            text.classList.add('mlight');
+        });
+        sliderImg.forEach(text => {
+            text.classList.remove('darkimg');
+        });
+    };
+
+    document.querySelector('#theme-toggle').addEventListener('click', () => {
+        if (localStorage.getItem('dark-mode') === 'yes') {
+            localStorage.setItem('dark-mode', 'no');
+            themeButton.innerText = 'Tema Oscuro';
+            themeButton.classList.remove('btn-light');
+            themeButton.classList.add('btn-dark');
+            navBar.classList.toggle('dark-mode');
+            cardTheme.forEach(card => {
+                card.classList.remove('darkm');
+                card.classList.add('lightm');
+            });
+            textFooter.forEach(text => {
+                text.classList.remove('text-light');
+                text.classList.add('text-dark');
+            });
+            cartLi.forEach(text => {
+                text.classList.remove('mdark');
+                text.classList.add('mlight');
+            });
+            sliderImg.forEach(text => {
+                text.classList.remove('darkimg');
+            });
+        } else {
+            localStorage.setItem('dark-mode', 'yes');
+            themeButton.innerText = 'Tema Claro';
+            themeButton.classList.add('btn-light');
+            themeButton.classList.remove('btn-dark');
+            navBar.classList.toggle('dark-mode');
+            cardTheme.forEach(card => {
+                card.classList.remove('lightm');
+                card.classList.add('darkm');
+            });
+            textFooter.forEach(text => {
+                text.classList.remove('text-dark');
+                text.classList.add('text-light');
+            });
+            cartLi.forEach(text => {
+                text.classList.add('mdark');
+                text.classList.remove('mlight');
+            });
+            sliderImg.forEach(text => {
+                text.classList.add('darkimg');
+            });
+        }
+        document.body.classList.toggle('dark');
+    });
+
+    //Generador de productos
+
     function cardsBuilder(products) {
         return products.reduce((acc, element) => {
             element.applyDiscount();
@@ -55,7 +134,6 @@ function initializePage() {
         }, "");
     }
 
-
     const webProductsArray = products.filter((producto) => {
         return producto.category === "web";
     });
@@ -80,65 +158,6 @@ function initializePage() {
         containerVPS.innerHTML = vpsProductsCard;
     }
 
-    //Web Theme
-
-    const navBar = document.getElementById("navbar-theme");
-    const themeButton = document.querySelector('#theme-toggle');
-    const cardTheme = document.querySelectorAll('#card');
-    const textFooter = document.querySelectorAll('#text-footer');
-
-    if (localStorage.getItem("dark-mode") === "yes") {
-        document.body.classList.add('dark');
-        themeButton.innerText = "Tema Claro";
-        themeButton.classList.remove('btn-light');
-        themeButton.classList.add('btn-dark');
-        navBar.classList.toggle('dark-mode');
-        cardTheme.forEach(card => {
-            card.classList.remove('lightm');
-            card.classList.add('darkm');
-        });
-        textFooter.forEach(text => {
-            text.classList.remove('text-dark');
-            text.classList.add('text-light');
-        });
-    };
-
-    document.querySelector('#theme-toggle').addEventListener('click', () => {
-        if (localStorage.getItem('dark-mode') === 'yes') {
-            localStorage.setItem('dark-mode', 'no');
-            themeButton.innerText = 'Tema Oscuro';
-            themeButton.classList.remove('btn-light');
-            themeButton.classList.add('btn-dark');
-            navBar.classList.toggle('dark-mode');
-            cardTheme.forEach(card => {
-                card.classList.remove('darkm');
-                card.classList.add('lightm');
-            });
-            textFooter.forEach(text => {
-                text.classList.remove('text-light');
-                text.classList.add('text-dark');
-            });
-        } else {
-            localStorage.setItem('dark-mode', 'yes');
-            themeButton.innerText = 'Tema Claro';
-            themeButton.classList.add('btn-light');
-            themeButton.classList.remove('btn-dark');
-            navBar.classList.toggle('dark-mode');
-            cardTheme.forEach(card => {
-                card.classList.remove('lightm');
-                card.classList.add('darkm');
-            });
-            textFooter.forEach(text => {
-                text.classList.remove('text-dark');
-                text.classList.add('text-light');
-            });
-        }
-        document.body.classList.toggle('dark');
-    });
-
-
-    //Shopping cart
-
     const productsCart = JSON.parse(localStorage.getItem("products")) || [];
     const cartButton = document.querySelectorAll('#menu-cart-button');
 
@@ -155,49 +174,129 @@ function initializePage() {
 
     const productCounts = JSON.parse(localStorage.getItem("productCounts")) || {};
 
+    function checkDomainAvailability(domainName) {
+        const apiKey = 'at_NLMENHyAKmwvs7qOceUKQpuM0D8Xy';
+        const cmd = 'GET_DN_AVAILABILITY';
+        const getMode = 'DNS_ONLY';
+        const outputFormat = 'JSON';
+
+        const apiUrl = `https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=${apiKey}&domainName=${domainName}&cmd=${cmd}&getMode=${getMode}&outputFormat=${outputFormat}`;
+
+        return fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const domainAvailability = data.DomainInfo.domainAvailability;
+
+                if (domainAvailability === 'AVAILABLE') {
+                    return true;
+                } else {
+                    return false;
+                }
+            })
+            .catch(error => {
+                console.error('Error al realizar la solicitud:', error);
+                return false;
+            });
+    }
+
     const addToCartButtons = document.querySelectorAll("#cart-button");
 
     const allProducts = products;
 
+    const searchButton = document.getElementById('button-addon2');
+
+    if (searchButton) {
+        searchButton.addEventListener('click', function () {
+
+            const domainInput = document.getElementById('domainInput');
+
+            if (domainInput) {
+                const domainValue = domainInput.value;
+
+                checkDomainAvailability(domainValue)
+                    .then(isAvailable => {
+
+                        if (isAvailable) {
+                            const searchContainer = document.getElementById('search-container');
+
+                            const successText = document.createElement('p');
+                            successText.classList.add('text-primary');
+                            successText.innerText = `${domainValue} está disponible!`;
+                            searchContainer.appendChild(successText);
+
+                            const buttonCart = document.createElement('button');
+                            buttonCart.id = 'cart-button-domain';
+                            buttonCart.classList.add('btn', 'btn-primary', 'select-button', 'mt-3');
+                            buttonCart.innerText = 'Agregar al carrito';
+                            searchContainer.appendChild(buttonCart);
+
+                            const domainCartButton = document.getElementById('cart-button-domain');
+                            if (domainCartButton) {
+                                domainCartButton.addEventListener("click", () => {
+                                    let domainProduct
+                                    domainProduct = products.find(product => product.category === "domain");
+                                    addToCart(domainProduct);
+                                });
+                            } else {
+                                console.error('Elemento con id "cart-button-domain" no encontrado en el documento.');
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error en la solicitud del dominio:', error);
+                    });
+            } else {
+                console.error('Elemento con id "domainInput" no encontrado en el documento.');
+            }
+        });
+    }
+
+    function addToCart(selectedProduct) {
+        if (productCounts[selectedProduct.title]) {
+            productCounts[selectedProduct.title].count++;
+        } else {
+            productCounts[selectedProduct.title] = {
+                count: 1,
+                price: selectedProduct.finalPrice,
+                annual: selectedProduct.annualCost,
+                renovation: selectedProduct.renovationCost
+            };
+        }
+
+        productsCart.push(selectedProduct);
+
+        localStorage.setItem("products", JSON.stringify(productsCart));
+        localStorage.setItem("productCounts", JSON.stringify(productCounts));
+
+        Toastify({
+            text: `Tu producto ${selectedProduct.title} ha sido añadido al carrito.`,
+            duration: 5000,
+            destination: "pages/cart.html",
+            newWindow: true,
+            close: true,
+            gravity: "bottom",
+            position: "right",
+            stopOnFocus: true,
+            style: {
+                background: "linear-gradient(to right, transparent, #0056b3, #007bff )",
+            },
+        }).showToast();
+
+        cartButton.forEach(element => {
+            element.classList.remove('bi-cart');
+            element.classList.add('bi-cart-check');
+        });
+    }
+
     addToCartButtons.forEach((button, index) => {
         button.addEventListener("click", () => {
             const selectedProduct = allProducts[index];
-
-            if (productCounts[selectedProduct.title]) {
-                productCounts[selectedProduct.title].count++;
-            } else {
-                productCounts[selectedProduct.title] = {
-                    count: 1,
-                    price: selectedProduct.finalPrice,
-                    annual: selectedProduct.annualCost,
-                    renovation: selectedProduct.renovationCost
-                };
-            }
-
-            productsCart.push(selectedProduct);
-
-            localStorage.setItem("products", JSON.stringify(productsCart));
-            localStorage.setItem("productCounts", JSON.stringify(productCounts));
-
-            Toastify({
-                text: `Tu producto ${selectedProduct.title} ha sido añadido al carrito.`,
-                duration: 5000,
-                destination: "pages/cart.html",
-                newWindow: true,
-                close: true,
-                gravity: "bottom",
-                position: "right",
-                stopOnFocus: true,
-                style: {
-                    background: "linear-gradient(to right, transparent, #0056b3, #007bff )",
-                },
-            }).showToast();
-
-            cartButton.forEach(element => {
-                element.classList.remove('bi-cart');
-                element.classList.add('bi-cart-check');
-            });
-
+            addToCart(selectedProduct);
         });
     });
 
@@ -313,7 +412,6 @@ function initializePage() {
             clearCartButton.textContent = "Vaciar Carrito";
             clearCartButton.addEventListener("click", clearCart);
             document.getElementById("selected-products-list").appendChild(clearCartButton);
-
         }
     }
 
@@ -427,25 +525,31 @@ function initializePage() {
         displayCheckoutPrice(checkoutPrice);
 
         updatePriceDisplay();
-        
+
     }
 
     const suscriptionMesInput = document.getElementById('monthly');
     const suscriptionAnualInput = document.getElementById('annual');
     const suscriptionRenewInput = document.getElementById('renew');
 
-    suscriptionMesInput.addEventListener('change', function () {
-        updateCartView();
-    });
+    if (suscriptionMesInput) {
+        suscriptionMesInput.addEventListener('change', function () {
+            updateCartView();
+        });
+    }
 
-    suscriptionAnualInput.addEventListener('change', function () {
-        updateCartView();
-        suscriptionRenewInput.style.display = 'block';
-    });
+    if (suscriptionAnualInput) {
+        suscriptionAnualInput.addEventListener('change', function () {
+            updateCartView();
+            suscriptionRenewInput.style.display = 'block';
+        });
+    }
 
-    suscriptionRenewInput.addEventListener('change', function () {
-        updateCartView();
-    });
+    if (suscriptionRenewInput) {
+        suscriptionRenewInput.addEventListener('change', function () {
+            updateCartView();
+        });
+    }
 
     function validarCodigoPromocional(promoCode) {
         return promoCode === 'coderhouse';
@@ -453,64 +557,67 @@ function initializePage() {
 
     let isPromoCodeApplied = false;
 
-    document.getElementById('promoForm').addEventListener('submit', function (event) {
-        event.preventDefault();
+    const promotionCode = document.getElementById('promoForm');
 
-        const promoCodeInput = document.getElementById('promoCodeInput');
-        const promoCode = promoCodeInput.value.trim().toLowerCase();
+    if (promotionCode) {
+        document.getElementById('promoForm').addEventListener('submit', function (event) {
+            event.preventDefault();
 
-        if (!isPromoCodeApplied && validarCodigoPromocional(promoCode)) {
-            const checkoutPrice = calculateCheckoutPrice(productCounts);
-            const discount = checkoutPrice * 0.1;
-            updateCartView(discount);
-            isPromoCodeApplied = true;
+            const promoCodeInput = document.getElementById('promoCodeInput');
+            const promoCode = promoCodeInput.value.trim().toLowerCase();
 
-            Toastify({
-                text: `Código promocional aplicado!`,
-                duration: 5000,
-                destination: "cart.html",
-                newWindow: true,
-                close: true,
-                gravity: "bottom",
-                position: "right",
-                stopOnFocus: true,
-                style: {
-                    background: "linear-gradient(to right, transparent, #0056b3, #007bff )",
-                },
-            }).showToast();
-        } else if (isPromoCodeApplied) {
-            Toastify({
-                text: `El código promocional ya se ha aplicado.'`,
-                duration: 5000,
-                destination: "cart.html",
-                newWindow: true,
-                close: true,
-                gravity: "bottom",
-                position: "right",
-                stopOnFocus: true,
-                style: {
-                    background: "linear-gradient(to right, transparent, #DC4C64, #bb2d3b)",
-                },
-            }).showToast();
-        } else {
-            Toastify({
-                text: `Código promocional inválido. Por favor, inténtelo de nuevo.`,
-                duration: 5000,
-                destination: "cart.html",
-                newWindow: true,
-                close: true,
-                gravity: "bottom",
-                position: "right",
-                stopOnFocus: true,
-                style: {
-                    background: "linear-gradient(to right, transparent, #DC4C64, #bb2d3b)",
-                },
-            }).showToast();
-        }
+            if (!isPromoCodeApplied && validarCodigoPromocional(promoCode)) {
+                const checkoutPrice = calculateCheckoutPrice(productCounts);
+                const discount = checkoutPrice * 0.1;
+                updateCartView(discount);
+                isPromoCodeApplied = true;
 
-        promoCodeInput.value = '';
-    });
+                Toastify({
+                    text: `Código promocional aplicado!`,
+                    duration: 5000,
+                    destination: "cart.html",
+                    newWindow: true,
+                    close: true,
+                    gravity: "bottom",
+                    position: "right",
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to right, transparent, #0056b3, #007bff )",
+                    },
+                }).showToast();
+            } else if (isPromoCodeApplied) {
+                Toastify({
+                    text: `El código promocional ya se ha aplicado.'`,
+                    duration: 5000,
+                    destination: "cart.html",
+                    newWindow: true,
+                    close: true,
+                    gravity: "bottom",
+                    position: "right",
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to right, transparent, #DC4C64, #bb2d3b)",
+                    },
+                }).showToast();
+            } else {
+                Toastify({
+                    text: `Código promocional inválido. Por favor, inténtelo de nuevo.`,
+                    duration: 5000,
+                    destination: "cart.html",
+                    newWindow: true,
+                    close: true,
+                    gravity: "bottom",
+                    position: "right",
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to right, transparent, #DC4C64, #bb2d3b)",
+                    },
+                }).showToast();
+            }
 
+            promoCodeInput.value = '';
+        });
+    };
 
     function calculateCheckoutPrice(productCounts, discount = 0) {
         let checkoutPrice = 0;
@@ -562,6 +669,7 @@ function initializePage() {
 
         const currencyContainer = document.createElement("div");
         currencyContainer.classList.add("form-check", "form-switch");
+        currencyContainer.id = "form-switch-container";
 
         const currencyInput = document.createElement("input");
         currencyInput.classList.add("form-check-input");
@@ -588,8 +696,6 @@ function initializePage() {
 
     }
 
-    // obtener valor del dolar
-
     let dolarToday = 0;
 
     async function dolarValue() {
@@ -612,10 +718,9 @@ function initializePage() {
 
     let currencyNumber = document.getElementById("currency-number");
     let currencyText = document.getElementById("currency-text");
-    let currencySelector = document.getElementById("flexSwitchCheckCurrency");
     let currencyLabel = document.querySelector(".form-check-label[for='flexSwitchCheckCurrency']");
     let isARSSelected = false;
-    
+
     function updatePriceDisplay() {
         if (isARSSelected) {
             currencyLabel.textContent = "Precio en USD";
@@ -634,15 +739,17 @@ function initializePage() {
         }
     }
 
+    const currencySelector = document.getElementById("flexSwitchCheckCurrency");
 
-    currencySelector.addEventListener("change", function () {
-        isARSSelected = !isARSSelected;
-        updatePriceDisplay();
-    });
+    if (currencySelector) {
+        currencySelector.addEventListener("change", function () {
+            console.log('mi switch')
+            isARSSelected = !isARSSelected;
+            updatePriceDisplay();
+        });
+    }
 
     //Formulario finalización de compra
-
-    const form = document.querySelector('.needs-validation');
 
     class CreditCardValidator {
         constructor() {
@@ -682,72 +789,103 @@ function initializePage() {
 
     const creditCardValidator = new CreditCardValidator();
 
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        event.stopPropagation();
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-        if (form.checkValidity()) {        
-        const inputNombre = document.getElementById('firstName');
-        const inputApellido = document.getElementById('lastName');
-        const inputEmail = document.getElementById('email');
-        const inputCCName = document.getElementById('cc-name');
-        const inputCCNumber = document.getElementById('cc-number');
-        const inputCCExpiration = document.getElementById('cc-expiration');
-        const inputCCCVV = document.getElementById('cc-cvv');
-
-        const isNombreValid = inputNombre.value.trim() !== '';
-        const isApellidoValid = inputApellido.value.trim() !== '';
-        const isEmailValid = isValidEmail(inputEmail.value);
-        const isCCNameValid = inputCCName.value.trim() !== '';
-        const isCCNumberValid = creditCardValidator.validate(inputCCNumber.value);
-        const isCCExpirationValid = validateExpiration(inputCCExpiration.value);
-        const isCCCVVValid = validateCVV(inputCCCVV.value);
-
-        if (
-            isNombreValid &&
-            isApellidoValid &&
-            isEmailValid &&
-            isCCNameValid &&
-            isCCNumberValid &&
-            isCCExpirationValid &&
-            isCCCVVValid
-        ) {
-            clearCart();
-
-            form.reset();
-    
-            Toastify({
-                text: '¡Formulario enviado con éxito!',
-                duration: 3000,
-                gravity: 'top',
-                close: true,
-                backgroundColor: 'green',
-            }).showToast();
-    
-            return;
+    function generateString(length) {
+        let result = ' ';
+        const charactersLength = characters.length;
+        for (let i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
-        Toastify({
-            text: 'Por favor, complete todos los campos correctamente.',
-            duration: 3000, // Duración en milisegundos
-            gravity: 'top', // Posición de la notificación
-            close: true, // Agrega un botón de cierre
-            backgroundColor: 'red', // Color de fondo
-        }).showToast();
-    }
-        
-        form.classList.add('was-validated');
 
-    });
-    
+        return result;
+    };
 
-    form.addEventListener('input', function (event) {
-        const input = event.target;
-        if (input.checkValidity()) {
-            input.classList.remove('is-invalid');
-        } else {
-            input.classList.add('is-invalid');
-        }
-    });
+    const form = document.querySelector('.needs-validation');
+
+    if (form) {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (form.checkValidity()) {
+
+                const inputNombre = document.getElementById('firstName');
+                const inputApellido = document.getElementById('lastName');
+                const inputEmail = document.getElementById('email');
+                const inputCCName = document.getElementById('cc-name');
+                const inputCCNumber = document.getElementById('cc-number');
+                const inputCCExpiration = document.getElementById('cc-expiration');
+                const inputCCCVV = document.getElementById('cc-cvv');
+
+                const isNombreValid = inputNombre.value.trim() !== '';
+                const isApellidoValid = inputApellido.value.trim() !== '';
+                const isEmailValid = isValidEmail(inputEmail.value);
+                const isCCNameValid = inputCCName.value.trim() !== '';
+                const isCCNumberValid = creditCardValidator.validate(inputCCNumber.value);
+                const isCCExpirationValid = validateExpiration(inputCCExpiration.value);
+                const isCCCVVValid = validateCVV(inputCCCVV.value);
+
+                if (
+                    isNombreValid &&
+                    isApellidoValid &&
+                    isEmailValid &&
+                    isCCNameValid &&
+                    isCCNumberValid &&
+                    isCCExpirationValid &&
+                    isCCCVVValid
+                ) {
+                    clearCart();
+                    form.reset();
+
+                    Toastify({
+                        text: `¡Gracias por su compra! Número de pedido: ${generateString(12)}`,
+                        duration: 7000,
+                        gravity: 'top',
+                        close: true,
+                        style: {
+                            background: 'green',
+                        },
+                    }).showToast();
+                    return;
+                }
+
+                Toastify({
+                    text: 'Por favor, complete todos los campos correctamente.',
+                    duration: 3000,
+                    gravity: 'top',
+                    close: true,
+                    style: {
+                        background: 'red',
+                    },
+                }).showToast();
+            }
+
+            form.classList.add('was-validated');
+        });
+
+        form.addEventListener('input', function (event) {
+            const input = event.target;
+            if (input.checkValidity()) {
+                input.classList.remove('is-invalid');
+            } else {
+                input.classList.add('is-invalid');
+            }
+        });
+
+
+    };
+
+    if (form) {
+        form.addEventListener('input', function (event) {
+            const input = event.target;
+            if (input.checkValidity()) {
+                input.classList.remove('is-invalid');
+            } else {
+                input.classList.add('is-invalid');
+            }
+        });
+    };
 
     function isValidEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -764,17 +902,89 @@ function initializePage() {
         if (!regex.test(mmyy)) {
             return false;
         }
-    
+
         const [mm, yy] = mmyy.split('/');
-    
+
         const month = parseInt(mm, 10);
         const year = parseInt(yy, 10) + 2000;
-    
+
         const currentYear = new Date().getFullYear();
-    
+
         return month >= 1 && month <= 12 && year >= currentYear;
     }
 
+    const productBanner = document.getElementsByClassName('swiper');
+
+    if (productBanner) {
+        const swiper = new Swiper(".swiper", {
+            spaceBetween: 30,
+            centeredSlides: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            }
+        });
+    };
+
+
+    const contactForm = document.getElementById('contact-form');
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (contactForm.checkValidity()) {
+
+                const inputFullName = document.getElementById('fullName');
+                const inputContactEmail = document.getElementById('contactEmail');
+                const inputContactMessage = document.getElementById('contactMessage');
+
+                const isFullNameValid = inputFullName.value.trim() !== '';
+                const isEmailValid = isValidEmail(inputContactEmail.value);
+                const isMessageValid = inputContactMessage.value.trim() !== '';
+
+                if (
+                    isFullNameValid &&
+                    isEmailValid &&
+                    isMessageValid
+                ) {
+                    contactForm.reset();
+
+                    Toastify({
+                        text: `¡Su mensaje ha sido enviado!`,
+                        duration: 5000,
+                        gravity: 'top',
+                        close: true,
+                        style: {
+                            background: 'green',
+                        },
+                    }).showToast();
+                    return;
+                }
+
+                Toastify({
+                    text: 'Por favor, complete todos los campos correctamente.',
+                    duration: 3000,
+                    gravity: 'top',
+                    close: true,
+                    style: {
+                        background: 'red',
+                    },
+                }).showToast();
+            }
+            form.classList.add('was-validated');
+        });
+
+        contactForm.addEventListener('input', function (event) {
+            const input = event.target;
+            if (input.checkValidity()) {
+                input.classList.remove('is-invalid');
+            } else {
+                input.classList.add('is-invalid');
+            }
+        });
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function () {

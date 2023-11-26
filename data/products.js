@@ -207,7 +207,33 @@ const products = [
         "annualCost": 0,
         "renovationCost": 0,
         "features": [`<i class="bi bi-cpu"> 4 núcleos vCPU</i>`, `<i class="bi bi-memory"> 16 GB de memoria RAM</i>`, `<i class="bi bi-nvme"> 200 GB de almacenamiento SSD NVMe</i>`, `Compatibilidad con <i class="bi bi-ubuntu"> Linux o </i><i class="bi bi-windows"> Windows</i>`, `<i class="bi bi-database-gear"> Respaldos instantáneos</i>`, `<i class="bi bi-sliders"> cPanel o Plesk disponible</i>`, `<i class="bi bi-ethernet"> 3 IP adicionales disponibles a pedido</i>`, `<i class="bi bi-globe"> 4 centros de datos globales</i>`
-    ],
+        ],
+        applyDiscount: function () {
+            if (this.offer === true) {
+                const discount = (this.discount / 100) * this.price;
+                this.finalPrice = this.price - discount;
+                this.annualCost = this.finalPrice * 12;
+                this.renovationCost = this.price * 12;
+            } else {
+                this.finalPrice = this.price;
+                this.annualCost = this.price * 12;
+                this.renovationCost = this.price * 12;
+            }
+        }
+    },
+    {
+        "id": 9,
+        "category": "domain",
+        "title": "dominio",
+        "subtitle": "",
+        "description": "",
+        "price": 20.00,
+        "discount": 10.00,
+        "finalPrice": 0,
+        "offer": true,
+        "annualCost": 0,
+        "renovationCost": 0,
+        "features": [],
         applyDiscount: function () {
             if (this.offer === true) {
                 const discount = (this.discount / 100) * this.price;
